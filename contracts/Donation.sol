@@ -40,9 +40,11 @@ contract Donation {
         return address(this).balance;
     }
 
-    function withdraw(address owner) public {
+    function withdraw(address owner) public returns (bool){
         require(_owner == owner, "Only owner of this donation can withdraw from it");
-        payable(_owner).call{value: (address(this).balance)}("");
+        (bool success, ) = payable(_owner).call{value: (address(this).balance)}("");
+
+        return success;
     }
 
     function getDonationName() public view returns (string memory){
